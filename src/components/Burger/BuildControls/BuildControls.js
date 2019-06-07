@@ -16,8 +16,12 @@ const buildControls = (props) => (
             <BuildControl 
                 key={ctrl.label} 
                 label={ctrl.label}
-                added={() => props.ingredientAdded(ctrl.type)} />
+                added={() => props.ingredientAdded(ctrl.type)}
                 // set up an ES6 function here, execute props.ingredientAdded, so the function reference we're receiving in build controls and there, simply pass back control type.
+                removed={() => props.ingredientRemoved(ctrl.type)}
+                disabled={props.disabled[ctrl.type]}
+                // object format: {salad: t/f, meat: t/f, cheese: t/f, bacon: t/f}
+                 />
         ))}
     </div>
 );
