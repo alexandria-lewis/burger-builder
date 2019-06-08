@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 // you typically name constants you want to use as global constants in all capital characters.
 const INGREDIENT_PRICES = {
@@ -101,6 +103,10 @@ class BurgerBuilder extends Component {
         }
         return (
             <Aux>
+                <Modal>
+                    <OrderSummary ingredients={this.state.ingredients} />
+                </Modal>
+                {/* The goal was to show the order summary and this burger builder file is already getting quite crowded so I don't want to add the logic to transform this array into a nicely structured summary into this file, I will outsource it into its own component as this is generally a good practice in react, have granular focused components. */}
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     ingredientAdded={this.addIngredientHandler}
