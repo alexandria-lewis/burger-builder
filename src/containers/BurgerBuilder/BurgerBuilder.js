@@ -103,6 +103,10 @@ class BurgerBuilder extends Component {
         this.setState({purchasing: true});
     }
 
+    purchaseCancelHandler = () => {
+        this.setState({purchasing: false});
+    }
+
     render () {
         // immutable copy of state.ingredients object
         const disabledInfo = {
@@ -115,7 +119,7 @@ class BurgerBuilder extends Component {
         }
         return (
             <Aux>
-                <Modal show={this.state.purchasing}>
+                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
                     <OrderSummary ingredients={this.state.ingredients} />
                 </Modal>
                 {/* If we just add or remove the modal from or to the dom, we won't see an animation though, we need to switch some css property to show or hide it, to be able to animate that. 
