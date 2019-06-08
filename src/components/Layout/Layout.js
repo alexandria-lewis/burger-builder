@@ -7,10 +7,11 @@ created the hoc folder for this
 */
 import classes from './Layout.css';
 //classes can be any word, just used to assign obj params
+import Toolbar from '../Navigation/Toolbar/Toolbar';
 
 const layout = (props) => (
     <Aux>
-        <div>Toolbar, SideDrawer, Backdrop</div>
+        <Toolbar />
         <main className={classes.Content}>
             {props.children}
         </main>
