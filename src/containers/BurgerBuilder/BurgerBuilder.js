@@ -23,7 +23,8 @@ class BurgerBuilder extends Component {
             meat: 0
         },
         totalPrice: 4,
-        purchasable: false
+        purchasable: false,
+        purchasing: false
     }
 
     updatePurchaseState (ingredients) {
@@ -91,6 +92,17 @@ class BurgerBuilder extends Component {
         this.updatePurchaseState(updatedIngredients);
     }
 
+    // purchaseHandler () {
+    //     this.setState({purchasing: true});
+    // }
+    // TypeError: Cannot read property 'setState' of undefined
+
+    // I'm executing this set state here, exactly the same I use in other methods too, why could this fail? It fails because of the way I'm creating this method, I use the same method syntax as I use for render but you maybe remember that earlier in the course, I mentioned that this syntax will not work correctly, at least if we try to use the this keyword in there if the method is triggered through an event due to the way the this keyword works in Javascript, it will then not refer to the class. This is not the case for remove and addIngredientHandler because I use a slightly different syntax there, I set up these methods as properties where I assigned arrow functions. In the end these are still methods but internally, they take advantage of arrow functions which basically contain the state or the context of this. So we can easily fix this by setting purchaseHandler equal to an arrow function too and use that syntax for creating the method.
+
+    purchaseHandler = () => {
+        this.setState({purchasing: true});
+    }
+
     render () {
         // immutable copy of state.ingredients object
         const disabledInfo = {
@@ -103,9 +115,13 @@ class BurgerBuilder extends Component {
         }
         return (
             <Aux>
-                <Modal>
+                <Modal show={this.state.purchasing}>
                     <OrderSummary ingredients={this.state.ingredients} />
                 </Modal>
+                {/* If we just add or remove the modal from or to the dom, we won't see an animation though, we need to switch some css property to show or hide it, to be able to animate that. 
+                - Only if purchasing is true the modal should be visible.
+                - In Modal.js change the modal depending on the show property */}
+
                 {/* The goal was to show the order summary and this burger builder file is already getting quite crowded so I don't want to add the logic to transform this array into a nicely structured summary into this file, I will outsource it into its own component as this is generally a good practice in react, have granular focused components. */}
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
@@ -115,6 +131,7 @@ class BurgerBuilder extends Component {
                     disabled={disabledInfo}
                     // take advantage of this disabled property in this build controls component and there we should pass this information to the individual build control, to let it know if it should disable that button or not.
                     purchasable={this.state.purchasable}
+                    ordered={this.purchaseHandler}// this method gets executed when we click the order now button
                      />
             </Aux>
         );
