@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Aux from '../../../hoc/Aux';
+import Button from '../../UI/Button/Button';
 
 const orderSummary = (props) => {
     // again use object keys to transform this into an array of the keys of salad and so on.
@@ -24,8 +25,13 @@ const orderSummary = (props) => {
                 {ingredientSummary}
             </ul>
             <p>Continue to Checkout?</p>
-            <button>CANCEL</button>
-            <button>CONTINUE</button>
+            <Button btnType="Danger" clicked={props.purchaseCancelled}>CANCEL</Button>
+            <Button btnType="Success" clicked={props.purchaseContinued}>CONTINUE</Button>
+            {/* the component is set up to wrap {props.children} so we can put text in
+        
+            clicked will be triggered when the button is clicked and of course here we want to execute some method which since we're in the order summary component, we also have to receive here dynamically.
+            
+            Now the order summary component gets used in the burger builder component or container, so therefore we should pass a property to order summary or two properties actually, one which will pass a reference in the case that we want to continue with the purchase, a reference to a method which then handles this case and a reference to a method which handles the case that we don't want to continue. */}
         </Aux>
     )
 };
