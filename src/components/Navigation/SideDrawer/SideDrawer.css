@@ -1,0 +1,31 @@
+.SideDrawer {
+    position: fixed;
+    /* So let's set the position to fix then because it should always be on the page even if we scroll, it should feel like a static element. */
+    width: 280px;
+    max-width: 70%;
+    /* max-width should be 70% so that even on super narrow devices, it doesn't go over the edges. */
+    height: 100%;
+    left: 0;
+    top: 0;
+    /* The height has to be 100% to take the full screen height and the left position should be 0 and the top positions should be 0 so that it really sits on the full screen. */
+    z-index: 200;
+    /* I'll then give it a set index of 200, deliberately having a higher number than the backdrop of course */
+    background-color: #fff;
+    padding: 32px 16px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease-out;
+}
+
+@media (min-width: 500px) {
+    .SideDrawer {
+        display: none;
+    }
+}
+
+.Open {
+    transform: translateX(0);
+}
+
+.Closed {
+    transform: translateX(-100%);
+}
