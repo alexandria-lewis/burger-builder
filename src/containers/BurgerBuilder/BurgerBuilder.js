@@ -20,7 +20,38 @@ class BurgerBuilder extends Component {
             cheese: 0,
             meat: 0
         },
-        totalPrice: 4
+        totalPrice: 4,
+        purchasable: false
+    }
+
+    updatePurchaseState (ingredients) {
+        // We should call it after running addIngredientHandler or removeIngredientHandler, so there I'll then also execute this update purchase state, the same on the end of the removeIngredientHandler.
+
+        // USING INGREDIENTS passed in instead of a copy from the state to make sure we have the most current data
+        // const ingredients = {
+        //     ...this.state.ingredients
+        // };
+
+
+        //create some constant where I take my javascript object object and there I use keys again and pass my ingredients to it and this will again create an array of string entries, salad, bacon, cheese and so on.
+        const sum = Object.keys(ingredients)
+        // Now I said that I need these values here though so the amounts of the ingredients, not the names.
+
+        // Well we can simply map this array into the array we need. The map method of course still receives the key and then this is used in or the function we passed to the map method receives the key here should say and then we can use this to return new value and replace the old value which was the property name, salad and so on with that new value.
+            .map(igKey => {
+                // And here I simply wanted to return ingredients and there the value for a given key and this will be the amount because with ingredients and this notation, I'm accessing a certain property in the ingredients object, igKey is salad, bacon and so on so I'm basically getting these values, the numbers and that is what I return for each key.
+                return ingredients[igKey]
+            })
+            // So now I have an array of values, now all I need to do is call reduce to again reduce this array but this time not to flatten the array but to turn it into a single number, the sum of all ingredients.
+            .reduce((sum, el) => {
+                // For that, we'll have a starting number of 0 [, 0)] and then we have a function which is executed on each element in this mapped array.
+
+                // In this function, I get new sum and the individual element and keep in mind, sum simply is the constantly updated current sum up until the current iteration where this function is executed and once this function was executed on all array elements, sum is the final result.
+                return sum + el;
+            }, 0);
+            // With that, I get a sum constant which is zero if we have no ingredients added or any other number representing the total amount of ingredients, and with that I can simply call set state and set purchasable too and now it depends on whoever has sum is greater than zero or not, so we'll set it to sum greater 0.
+            this.setState({purchasable: sum > 0});
+            // This is either true or false and it is true if we have at least one ingredient, then purchasable is true and that is exactly the behavior I want.
     }
 
     addIngredientHandler = (type) => {
@@ -36,6 +67,9 @@ class BurgerBuilder extends Component {
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice + priceAddition;
         this.setState({totalPrice: newPrice, ingredients: updatedIngredients});
+        // Now due to the way set state works, when we execute update purchase state, we might not get the updated ingredients and therefore, once we copy the ingredients and analyze them, we might simply get an outdated version.
+        // Now we can of course simply fix this by passing the updated ingredients we have in add and remove ingredient handler anyways to the update purchase state method and expect to get ingredients there (i.e. put into the function's parenthesis), so ingredients.
+        this.updatePurchaseState(updatedIngredients);
     }
 
     removeIngredientHandler = (type) => {
@@ -52,6 +86,7 @@ class BurgerBuilder extends Component {
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice - priceDeduction;
         this.setState({totalPrice: newPrice, ingredients: updatedIngredients});
+        this.updatePurchaseState(updatedIngredients);
     }
 
     render () {
@@ -68,11 +103,12 @@ class BurgerBuilder extends Component {
             <Aux>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
-                    price={this.state.totalPrice}
                     ingredientAdded={this.addIngredientHandler}
                     ingredientRemoved={this.removeIngredientHandler}
+                    price={this.state.totalPrice}
                     disabled={disabledInfo}
                     // take advantage of this disabled property in this build controls component and there we should pass this information to the individual build control, to let it know if it should disable that button or not.
+                    purchasable={this.state.purchasable}
                      />
             </Aux>
         );

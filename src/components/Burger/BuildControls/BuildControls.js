@@ -24,6 +24,9 @@ const buildControls = (props) => (
                 // object format: {salad: t/f, meat: t/f, cheese: t/f, bacon: t/f}
                  />
         ))}
+        <button 
+            className={classes.OrderButton}
+            disabled={!props.purchasable}>ORDER NOW</button>
     </div>
 );
 
