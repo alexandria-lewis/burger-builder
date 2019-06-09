@@ -7,10 +7,14 @@ const burger = (props) => {
     // mod 156
     // keys method which extracts the keys of a given object and turns that into an array, so it gives you an array of the keys.
     // but in the end, it's just a way to transform an object of key value pairs into an array of burger ingredients where the value of that object is important for me to decide how many ingredients I need and the keys important for which type of ingredient I need.
-    console.log('Object.keys: '+Object.keys(props.ingredients) );
+
+    // console.log('Object.keys: '+Object.keys(props.ingredients) );
+
     let transformedIngredients = Object.keys(props.ingredients)
         .map(igKey => {
-            console.log('Object.keys().map(igKey): '+igKey);
+            
+            // console.log('Object.keys().map(igKey): '+igKey);
+
             // map executes a function on each element in the input array. So I'll give this argument we receive in the function the name igKey for ingredient key because that's just what's part of the array, salad and so on.
 
             // I want to transform this string value into an array with as many elements as we have ingredients for a given ingredient.
@@ -27,7 +31,9 @@ const burger = (props) => {
         .reduce((arr, el) => {
             return arr.concat(el)
         }, []);
-        console.log(transformedIngredients);
+
+        // console.log(transformedIngredients);
+
         if (transformedIngredients.length === 0) {
             transformedIngredients = <p>Please start adding ingredients!</p>
         }
