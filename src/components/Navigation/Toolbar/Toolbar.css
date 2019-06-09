@@ -18,3 +18,8 @@
 .Toolbar nav {
     height: 100%;
 }
+
+.Logo {
+    height: 80%;
+}
+/* I do have that logo class defined in three different files but due to css modules, this is actually converted to three different css classes so that they don't interfere. */

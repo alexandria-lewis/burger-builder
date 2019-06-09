@@ -1,10 +1,11 @@
 .Logo {
     background-color: #fff;
     padding: 8px;
-    height: 80%;
+    height: 100%;
     box-sizing: border-box;
     border-radius: 5px;
 }
+/* I do have that logo class defined in three different files but due to css modules, this is actually converted to three different css classes so that they don't interfere. */
 
 .Logo img {
     height: 100%;

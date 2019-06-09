@@ -4,7 +4,7 @@ import burgerLogo from '../../assets/images/burger-logo.png';
 import classes from './Logo.css';
 
 const logo = (props) => (
-    <div className={classes.Logo}>
+    <div className={classes.Logo} style={{height: props.height}}>
         {/* Now you could think that you simply say go up to the assets folder and then to the images folder and to burger logo png. Now this will not work as you would expect it to work due to the way our build workflow here is set up, keep in mind, the source folder is only the folder we're working in. 
     
         In the end, webpack will take all these files, bundle them together and create a new output folder. We can see that here because we're in development mode where all of that will happen in memory but once we do publish our app, we will get a real different folder where all the optimized, compiled and bundled assets are contained in. 
