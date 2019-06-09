@@ -129,6 +129,7 @@ class BurgerBuilder extends Component {
                         price={this.state.totalPrice}
                         purchaseCancelled={this.purchaseCancelHandler}
                         purchaseContinued={this.purchaseContinueHandler} />
+                        {/* I can identify one element here though where we might be able to save some performance by not re-rendering it unnecessarily and that is the modal component. It wraps the order summary and that of course means that whenever ingredients or the price changes, since these are props of order summary, order summary will be re-rendered. However if the modal is not visible, we don't need to do that. So actually only if the modal is shown, re-rendering of that wrapped element here makes sense. */}
                 </Modal>
                 {/* If we just add or remove the modal from or to the dom, we won't see an animation though, we need to switch some css property to show or hide it, to be able to animate that. 
                 - Only if purchasing is true the modal should be visible.
