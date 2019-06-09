@@ -23,3 +23,10 @@
     height: 80%;
 }
 /* I do have that logo class defined in three different files but due to css modules, this is actually converted to three different css classes so that they don't interfere. */
+
+@media (max-width: 499px) {
+    .DesktopOnly {
+        display: none;
+    }
+    /* I don't have this class for the default case so for devices which are broader than 500px but that basically means that it takes the default styling which is display block and therefore it will be visible. So I only overwrite this for small devices, now I can use this new class in a toolbar though and can add it here to the nav item, to the nav element. */
+}
