@@ -5,6 +5,7 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import axios from '../../axios-orders';
 
 // you typically name constants you want to use as global constants in all capital characters.
 const INGREDIENT_PRICES = {
@@ -108,7 +109,30 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        alert('You continue!');
+        // alert('You continue!');
+        const order = {
+            ingredients: this.state.ingredients,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Alex L',
+                address: {
+                    street: 'test road',
+                    zipCode: '12345',
+                    country: 'USA'
+                },
+                email: 'test@test.com'
+            },
+            deliveryMethod: 'fastest'
+        }
+        // you should definitely calculate that final price on the server because you probably have your product stored on the server there to make sure that the user isn't manipulating the code before sending it and manipulates the price which you're using. Still here I'm going to use that price, again be aware that this of course is not a set up you would use on a real app,
+
+        // I want to send my data to my backend, I want to make this HTTP request.
+        // Now the URL is of course now our base URL plus whatever we're adding here, and that's the cool thing about firebase I said that it uses as MongoDB like structure, we don't actually have tables here we just have json like nested structure and if you send a request to something like this URL slash orders, it's going to create our orders node and store our orders beneath that node and this is exactly what I want to do.
+        // I'll add slash orders here and now for firebase only, there is a special thing, you need to add .json here. This is the end point you just need to target for firebase to function correctly.
+        axios.post('/orders.json', order)
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
+        // I'm getting back a response with status 200 so let's check out firebase. It should update this page automatically and you should see the orders node in which you now see this cryptic name here. Now to use the post method, firebase is automatically creating and managing a list here and each list item simply get a unique ID assigned and created by firebase automatically.
     }
 
     render () {
