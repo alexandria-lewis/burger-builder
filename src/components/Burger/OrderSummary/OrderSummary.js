@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
-import Aux from '../../../hoc/Aux';
+import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../UI/Button/Button';
 
 // let's turn it into a class component so that we can add lifecycle hooks, so that we can see when this is updated.
 class OrderSummary extends Component {
+    // This could be a functional component, doesn't have to be a class
+
     // no need to implement componentWillUpdate here, componentDidUpdate will do and I simply want to console log orderSummary will update.
     componentWillUpdate() {
         console.log('[OrderSummary] WillUpdate');

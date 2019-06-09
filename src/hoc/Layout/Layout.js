@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-import Aux from '../../hoc/Aux';
+import Aux from '../Aux/Aux';
 /*
 using Aux to wrap the output into a JSON object
 created the hoc folder for this
 */
 import classes from './Layout.css';
 //classes can be any word, just used to assign obj params
-import Toolbar from '../Navigation/Toolbar/Toolbar';
-import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
+import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
 // So in my opinion, it makes more sense to turn the layout component into a class component where we can implement the method so that we can listen to both the sideDrawer closing itself by clicking on the backdrop as well as toolbar opening the sideDrawer by clicking on that toggle button.
 
