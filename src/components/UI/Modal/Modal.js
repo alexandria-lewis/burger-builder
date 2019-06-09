@@ -13,7 +13,8 @@ class Modal extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         // so now I want to check or now I might want to make sure that this only updates if show changes because that's the only thing which matters for me here.
-        return nextProps.show !== this.props.show;
+        return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
+        // Consider our modal code we use shouldComponentUpdate here and we basically only update the component if the show state changed. Here however, the children of the component simply change to props. children.changed, we're passing a new child, we're passing the spinner instead of the order summary, that doesn't trigger an update here. So we simply have to finetune our shouldComponentUpdate method in the modal component and we have to check if nextProps.children is actually different to thisProps.children so that it does update if it gets new children.
     }
 
     componentWillUpdate() {

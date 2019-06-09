@@ -5,6 +5,7 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-orders';
 
 // you typically name constants you want to use as global constants in all capital characters.
@@ -25,7 +26,8 @@ class BurgerBuilder extends Component {
         },
         totalPrice: 4,
         purchasable: false,
-        purchasing: false
+        purchasing: false,
+        loading: false
     }
 
     updatePurchaseState (ingredients) {
@@ -110,6 +112,7 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler = () => {
         // alert('You continue!');
+        this.setState({loading: true});
         const order = {
             ingredients: this.state.ingredients,
             price: this.state.totalPrice,
@@ -130,8 +133,12 @@ class BurgerBuilder extends Component {
         // Now the URL is of course now our base URL plus whatever we're adding here, and that's the cool thing about firebase I said that it uses as MongoDB like structure, we don't actually have tables here we just have json like nested structure and if you send a request to something like this URL slash orders, it's going to create our orders node and store our orders beneath that node and this is exactly what I want to do.
         // I'll add slash orders here and now for firebase only, there is a special thing, you need to add .json here. This is the end point you just need to target for firebase to function correctly.
         axios.post('/orders.json', order)
-            .then(response => console.log(response))
-            .catch(error => console.log(error));
+            .then(response => {
+                this.setState({loading: false, purchasing: false});
+            })
+            .catch(error => {
+                this.setState({loading: false, purchasing: false});
+            });
         // I'm getting back a response with status 200 so let's check out firebase. It should update this page automatically and you should see the orders node in which you now see this cryptic name here. Now to use the post method, firebase is automatically creating and managing a list here and each list item simply get a unique ID assigned and created by firebase automatically.
     }
 
@@ -145,14 +152,18 @@ class BurgerBuilder extends Component {
             // this is an ES6 if statement expression
             // object format: {salad: t/f, meat: t/f, cheese: t/f, bacon: t/f}
         }
+        let orderSummary = <OrderSummary 
+            ingredients={this.state.ingredients}
+            price={this.state.totalPrice}
+            purchaseCancelled={this.purchaseCancelHandler}
+            purchaseContinued={this.purchaseContinueHandler} />;
+        if(this.state.loading) {
+            orderSummary = <Spinner />;
+        }
         return (
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-                    <OrderSummary 
-                        ingredients={this.state.ingredients}
-                        price={this.state.totalPrice}
-                        purchaseCancelled={this.purchaseCancelHandler}
-                        purchaseContinued={this.purchaseContinueHandler} />
+                    {orderSummary}
                         {/* I can identify one element here though where we might be able to save some performance by not re-rendering it unnecessarily and that is the modal component. It wraps the order summary and that of course means that whenever ingredients or the price changes, since these are props of order summary, order summary will be re-rendered. However if the modal is not visible, we don't need to do that. So actually only if the modal is shown, re-rendering of that wrapped element here makes sense. */}
                 </Modal>
                 {/* If we just add or remove the modal from or to the dom, we won't see an animation though, we need to switch some css property to show or hide it, to be able to animate that. 
