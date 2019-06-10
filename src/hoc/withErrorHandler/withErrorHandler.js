@@ -16,8 +16,20 @@ const withErrorHandler = (WrappedComponent, axios) => {
             error: null
         }
 
-        // and now with this, we can add componentDidMount here and in componentDidMount, we can now set up our axios listener,
-        componentDidMount() {
+        // REMOVED JSON ext from ingredients firebase path in BurgerBuilder for error testing!!!
+
+        // Now the cool thing is we're showing the spinner but if we now are removing the JSON end here of our URL where we're getting the ingredients, just as an example, if we're removing that and we go back, we don't get the error mode.
+
+        // We're setting up our interceptors in the componentDidMount hook and it worked great for the post request but think about that lifecycle diagram, there you see componentDidMount is actually called after all child components have been rendered, which means after componentDidMount was completed in the child components. 
+        
+        // Now think about our withErrorHandler, here we're wrapping this wrapped component which is our burger builder container for example because there we are using withErrorHandler on the export, so we're essentially wrapping the burger builder and that of course has one implication, componentDidMount in the withErrorHandler will only be called once componentDidMount was called here and since we reach out to the web in componentDidMount of the wrapped component, we never set up our interceptors.
+
+        // I'll use componentWillMount. However in the future, this React lifecycle hook or lifecycle method will not be supported anymore and therefore you can also just use the constructor because the general idea here is that we execute this code when this component here gets created and with that, I mean that component object and of course the constructor also runs when this gets created, so therefore using the constructor instead of componentWillMount will work in exactly the same way.
+
+        // componentDidMount() {
+        componentWillMount() {
+            // This will be called before the child components are rendered and we're not causing side effects here, we're just registering the interceptors and we want to do that before the child components are rendered.
+
             axios.interceptors.request.use(req => {
                 // I'll call use and I'm not really interested in the request but there's one thing I want to do in there, I want to call this set state and clear any errors, so that whenever I send a request, I don't have my error set up anymore, so that I definitely clear it here.
                 this.setState({error: null});

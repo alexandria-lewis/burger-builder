@@ -19,17 +19,34 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients: null,
         totalPrice: 4,
         purchasable: false,
         purchasing: false,
-        loading: false
+        loading: false,
+        error: false
     }
+
+    // So still in the burger builder component, I want to set up the state dynamically and you learned that a good place for fetching data is componentDidMount
+
+    componentDidMount () {
+        axios.get('https://react-my-burger-2153f.firebaseio.com/ingredients.json')
+        // DONT forget .json for firebase
+        .then(response => {
+            // So now the goal is to set our state, here ingredients to that object,
+            this.setState({ingredients: response.data})
+        })
+        // Now with that if we save this and we reload the application, we get that error modal but then we get another error that we fail to set our state. The reason for this is that the then block gets executed in our burger builder even though we have an error. Now the reason for that simply is that we're not having a catch method here in componentDidMount of the burger builder.
+        .catch(error => {
+            // we probably would want to handle that specific error case here for this specific page by for example also setting the UI here. So there, we could also set some error state, so now in the burger builder which is null initially or false maybe and then inside here if we get an error, if we catch this, then we call set state and set error to true.
+            this.setState({error: true});
+            // Now with that we can go down to the render method and we want to output an error message for this case where our application becomes unusable.
+        });
+    }
+
+    // you see we get an error because now when we try to loop through our ingredients at the start of the app, that of course fails because initially ingredients is now null, we're only fetching it at the start and that's a typical use case in applications, you fetch data when it loads, so parts of the UI which depend on the data will therefore fail.
+
+    // Now this of course can easily be prevented by checking if we have ingredients before rendering anything which depends on ingredients, like the burger here.
 
     updatePurchaseState (ingredients) {
         // We should call it after running addIngredientHandler or removeIngredientHandler, so there I'll then also execute this update purchase state, the same on the end of the removeIngredientHandler.
@@ -148,19 +165,48 @@ class BurgerBuilder extends Component {
         const disabledInfo = {
             ...this.state.ingredients
         }
+
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0
             // this is an ES6 if statement expression
             // object format: {salad: t/f, meat: t/f, cheese: t/f, bacon: t/f}
         }
-        let orderSummary = <OrderSummary 
-            ingredients={this.state.ingredients}
-            price={this.state.totalPrice}
-            purchaseCancelled={this.purchaseCancelHandler}
-            purchaseContinued={this.purchaseContinueHandler} />;
+
+        let orderSummary = null;
+        // the order summary will also use the ingredients and therefore fail. So here, we should simply also add something and set order summary to null by default and then add the same check or actually we already have that check of course, where we overwrite that order summary variable with the order summary if ingredients are set, so let's add this after this burger code here maybe.
+
+        // Here we set burger to spinner, now we actually don't want to show the spinner but our the application is not usable at all error message if we have the error equal to true.
+        let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
+        // So here we could check if this state error, if that is true, then we actually want to show a paragraph where we say ingredients can't be loaded, this is our worst case scenario otherwise we're showing the spinner or we're overwriting it with the ingredients if we got them.
+
+        if(this.state.ingredients){
+            burger = (
+                <Aux>
+                    <Burger ingredients={this.state.ingredients} />
+                    <BuildControls
+                        ingredientAdded={this.addIngredientHandler}
+                        ingredientRemoved={this.removeIngredientHandler}
+                        price={this.state.totalPrice}
+                        disabled={disabledInfo}
+                        // take advantage of this disabled property in this build controls component and there we should pass this information to the individual build control, to let it know if it should disable that button or not.
+                        purchasable={this.state.purchasable}
+                        ordered={this.purchaseHandler}// this method gets executed when we click the order now button
+                         />
+                </Aux>
+            );
+
+            orderSummary = <OrderSummary 
+                ingredients={this.state.ingredients}
+                price={this.state.totalPrice}
+                purchaseCancelled={this.purchaseCancelHandler}
+                purchaseContinued={this.purchaseContinueHandler} />;
+        }
+
+        // I also want to make sure that we overwrite this again if loading was set, so after this if statement where we check for ingredients, I'll add this old if statement where we check for the loading state to overwrite order summary when needed.
         if(this.state.loading) {
             orderSummary = <Spinner />;
         }
+
         return (
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
@@ -172,16 +218,9 @@ class BurgerBuilder extends Component {
                 - In Modal.js change the modal depending on the show property */}
 
                 {/* The goal was to show the order summary and this burger builder file is already getting quite crowded so I don't want to add the logic to transform this array into a nicely structured summary into this file, I will outsource it into its own component as this is generally a good practice in react, have granular focused components. */}
-                <Burger ingredients={this.state.ingredients} />
-                <BuildControls
-                    ingredientAdded={this.addIngredientHandler}
-                    ingredientRemoved={this.removeIngredientHandler}
-                    price={this.state.totalPrice}
-                    disabled={disabledInfo}
-                    // take advantage of this disabled property in this build controls component and there we should pass this information to the individual build control, to let it know if it should disable that button or not.
-                    purchasable={this.state.purchasable}
-                    ordered={this.purchaseHandler}// this method gets executed when we click the order now button
-                     />
+
+                {/* moved ingredient dependent components (Burger and BuildControls) into variable for content checking */}
+                {burger}
             </Aux>
         );
     }
