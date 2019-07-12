@@ -1,12 +1,9 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-// There is a way we could still get the props in the burger component too though and this really is a bit advanced and not something we need here but I want to show it nonetheless.
 
 import classes from './Burger.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = (props) => {
-    console.log(props);
     // mod 156
     // keys method which extracts the keys of a given object and turns that into an array, so it gives you an array of the keys.
     // but in the end, it's just a way to transform an object of key value pairs into an array of burger ingredients where the value of that object is important for me to decide how many ingredients I need and the keys important for which type of ingredient I need.
@@ -50,7 +47,4 @@ const burger = (props) => {
     );
 };
 
-export default withRouter(burger);
-// The higher order component is named withRouter and if we wrap our export with it, so like this with router burger here, if I now save this now you see that in the router we also have match location and history and match will refer to the nearest match. So to the nearest route which was matched in the past, in this case the route which matched the burger builder.
-
-// If you ever need direct access to match history and location and you don't want to manually pass it on from the top level component, you can use withRouter.
+export default burger;

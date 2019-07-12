@@ -154,6 +154,9 @@ class BurgerBuilder extends Component {
         //     });
 
         // I will comment all this code out because I no longer want to store it on firebase immediately here I went to go to the checkout component instead.
+
+        this.props.history.push('/checkout');
+        // I of course had access to this props, history is one of these special props provided by the router and there we have this push prop which allows us to basically switch the page and push a new page onto that stack of pages.
     }
 
     render () {
