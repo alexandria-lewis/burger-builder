@@ -1,0 +1,13 @@
+/* I'll add that CheckoutSummary.css class here because remember, we're back in our course project, we're using CSS modules here to scope our styles. */
+
+.CheckoutSummary {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+}
+
+@media (min-width: 600px) {
+    .CheckoutSummary {
+        width: 500px;
+    }
+}
