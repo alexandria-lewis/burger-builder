@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
@@ -23,8 +24,19 @@ class App extends Component {
     return (
       <div>
         <Layout>
-          <BurgerBuilder />
-          <Checkout />
+
+          {/* instead of using burger builder or checkout like this hardcoded in there are or route with a path and then with component, to render some component here.
+          It's a self-closing component because you don't need to pass anything between opening and closing tag, I actually can't. */}
+          
+          <Switch>
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/" exact component={BurgerBuilder} />
+          </Switch>
+
+          {/* TREAT ME AS A PREFIX STANDARD:
+          if "/" is above anything it will be loaded along with "/whatever"
+          exact property to prevent, without exact can use order
+          OR wrap in a <Switch> to only get one hit and put it at the bottom */}
         </Layout>
       </div>
     );
