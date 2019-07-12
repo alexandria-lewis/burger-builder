@@ -20,12 +20,10 @@ const checkoutSummary = (props) => {
             {/* these buttons as you probably know support two different styles, we have the success and the danger class here which we can pass and we do pass it with the button type property. (in button.js classes[props.btnType] ) */}
             <Button 
                 btnType="Danger"
-                // clicked={}
-                >CANCEL</Button>
+                clicked={props.checkoutCancelled}>CANCEL</Button>
             <Button 
                 btnType="Success"
-                // clicked={}
-                >CONTINUE</Button>
+                clicked={props.checkoutContinued}>CONTINUE</Button>
             {/* So these are the two buttons, you also know that the buttons expose the click property which simply indicates that we clicked on the button. So that is something I'll also need to do */}
         </div>
     )
