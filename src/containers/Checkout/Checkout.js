@@ -13,6 +13,18 @@ class Checkout extends Component {
         }
     }
 
+    // I won't use componentDidUpdate or anything like that because whenever I load this component, it will mount itself, there is no way I can route to it without it being mounted again because it's not nested in some other page or anything like that.
+    componentDidMount() {
+        const query = new URLSearchParams(this.props.location.search);
+        // I used the URLSearchParams constructor, pass this.props.location.search which includes the ? and so on but with URL search purpose, I can basically extract that.
+        const ingredients = {};// an object to set to state.ingredients
+        for (let param of query.entries()){
+            // ['salad', '1'] format
+            ingredients[param[0]] = +param[1]; // converting to a number with +
+        }
+        this.setState({ingredients: ingredients});
+    }
+
     checkoutCancelledHandler = () => { // using fat arrow to inherit the THIS keyword
         // Now since I'm in the checkout container which was loaded with the route component, we here also have access to this props and there too, the history prop, and the history prop also has a go back method which I want to execute upon cancelling.
         this.props.history.goBack();

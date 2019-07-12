@@ -155,7 +155,18 @@ class BurgerBuilder extends Component {
 
         // I will comment all this code out because I no longer want to store it on firebase immediately here I went to go to the checkout component instead.
 
-        this.props.history.push('/checkout');
+        const queryParams = [];
+        for (let i in this.state.ingredients ) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+            // I will use a little helper method which is provided by javascript, encodeURIComponent, which simply encodes my elements such that they can be used in the URL, this is relevant for whitespace and so on.
+            // setting property name equal to well the value for that property name
+        }
+        // So this is an array which now just has a couple of strings which is property name equal property value. Now this array of strings is what I want to join with the & sign.
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        });
         // I of course had access to this props, history is one of these special props provided by the router and there we have this push prop which allows us to basically switch the page and push a new page onto that stack of pages.
     }
 
