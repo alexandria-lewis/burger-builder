@@ -34,8 +34,13 @@ class Orders extends Component {
     render () {
         return (
             <div>
-                <Order />
-                <Order />
+                {/* So here I got my individual order which should basically just be converted into an order object */}
+                {this.state.orders.map(order => (
+                    <Order 
+                        key={order.id}
+                        ingredients={order.ingredients}
+                        price={order.price} />
+                ))}
             </div>
         );
     }
