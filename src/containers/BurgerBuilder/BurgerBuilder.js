@@ -130,37 +130,16 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        // this.setState({loading: true});
-        // const order = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.state.totalPrice,
-        //     customer: {
-        //         name: 'Alex L',
-        //         address: {
-        //             street: 'test road',
-        //             zipCode: '12345',
-        //             country: 'USA'
-        //         },
-        //         email: 'test@test.com'
-        //     },
-        //     deliveryMethod: 'fastest'
-        // }
-        // axios.post('/orders.json', order)
-        //     .then(response => {
-        //         this.setState({loading: false, purchasing: false});
-        //     })
-        //     .catch(error => {
-        //         this.setState({loading: false, purchasing: false});
-        //     });
-
-        // I will comment all this code out because I no longer want to store it on firebase immediately here I went to go to the checkout component instead.
-
         const queryParams = [];
         for (let i in this.state.ingredients ) {
             queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
             // I will use a little helper method which is provided by javascript, encodeURIComponent, which simply encodes my elements such that they can be used in the URL, this is relevant for whitespace and so on.
             // setting property name equal to well the value for that property name
         }
+
+        queryParams.push('price=' + this.state.totalPrice);
+        // So here I'll simply push it to my queryParams, I'll push the price equals and then this.state.totalPrice so that is also passed as a query parameter. This of course also means that I have to get it inside my check out component.
+
         // So this is an array which now just has a couple of strings which is property name equal property value. Now this array of strings is what I want to join with the & sign.
         const queryString = queryParams.join('&');
         this.props.history.push({

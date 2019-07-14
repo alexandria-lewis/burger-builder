@@ -7,24 +7,27 @@ import ContactData from './ContactData/ContactData';
 
 class Checkout extends Component {
     state = {
-        ingredients: {
-            salad: 1,
-            meat: 1,
-            cheese: 1,
-            bacon: 1
-        }
+        ingredients: null,
+        price: 0
     }
 
-    // I won't use componentDidUpdate or anything like that because whenever I load this component, it will mount itself, there is no way I can route to it without it being mounted again because it's not nested in some other page or anything like that.
-    componentDidMount() {
+    // Now to fix this (ingredients error cannot initialize null in DidMount), what we can do is we can simply change componentDidMount to WillMount before we render the child component, we already have access to the props there so we can already get the queryParams there. and we do this at the point of time where we don't render children so we can set up the state prior to render children.
+    componentWillMount() {
         const query = new URLSearchParams(this.props.location.search);
         // I used the URLSearchParams constructor, pass this.props.location.search which includes the ? and so on but with URL search purpose, I can basically extract that.
         const ingredients = {};// an object to set to state.ingredients
+        let price = 0;
         for (let param of query.entries()){
             // ['salad', '1'] format
-            ingredients[param[0]] = +param[1]; // converting to a number with +
+
+            if (param[0] === 'price') {
+                price = param[1];
+            } else {
+                ingredients[param[0]] = +param[1]; // converting to a number with +
+            }
+            // Now here I'm looping for all the ingredients and then I'm pushing down onto my ingredients array, the total prize of course is no ingredient so I shouldn't push it onto this array. So instead I'll have to check if param[0] is equal to price and this of course is only kind of a work around we'll find a better way of handling this state and passing it to this other container later in this course, no worries.
         }
-        this.setState({ingredients: ingredients});
+        this.setState({ingredients: ingredients, totalPrice: price});
     }
 
     checkoutCancelledHandler = () => { // using fat arrow to inherit the THIS keyword
@@ -49,8 +52,12 @@ class Checkout extends Component {
                     checkoutContinued={this.checkoutContinuedHandler} />
                 <Route 
                     path={this.props.match.path + '/contact-data'} 
-                    component={ContactData} />
-                    {/* use route here below my checkOutSummary to load something for a path which should now depend on the path we're currently on +/ContactData. So I'll use this props and then we can use match url (this.props.match.url) or also for building paths and routes you might use path +/ contact data and this should also be part of the dynamic path here, the string. */}
+                    render={(props) => (<ContactData ingredients={this.state.ingredients} price={this.state.totalPrice} {...props} />)} />
+                {/* To pass props using RENDER property which takes a method as you learned where you then output some jsx on the right side of the arrow and there I actually want to render the contactData element */}
+
+                {/* Now I will use the props I get in this render method and I will simply distribute them here after passing my own props with curly braces props. Whatever I get in the props here will be passed on to a contact data and therefore since this will include the history object, this push method here should work. */}
+
+                {/* use route here below my checkOutSummary to load something for a path which should now depend on the path we're currently on +/ContactData. So I'll use this props and then we can use match url (this.props.match.url) or also for building paths and routes you might use path +/ contact data and this should also be part of the dynamic path here, the string. */}
             </div>
         );
     }
