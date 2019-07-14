@@ -12,19 +12,23 @@ const input = (props) => {
             inputElement = <input 
                 className={classes.InputElement} 
                 {...props.elementConfig} 
-                value={props.value} />;
+                value={props.value}
+                onChange={props.changed} />;
+                // and of course I don't want to handle the change in this component, I expect to get a method reference from outside which then takes care about this.
             break;
         case ('textarea'):
             inputElement = <textarea 
                 className={classes.InputElement} 
                 {...props.elementConfig} 
-                value={props.value} />;
+                value={props.value}
+                onChange={props.changed} />;
             break;
         case ('select'):
             inputElement = (
                 <select 
                     className={classes.InputElement}
-                    value={props.value}>
+                    value={props.value}
+                    onChange={props.changed} >
                         {/* And by the way, having that value on the select is important to make two way binding work correctly and so on. */}
                         {/* to dynamically create options mapping this into an array of jsx elements */}
                     {props.elementConfig.options.map(option => (
@@ -40,7 +44,8 @@ const input = (props) => {
             inputElement = <input 
                 className={classes.InputElement} 
                 {...props.elementConfig} 
-                value={props.value} />;
+                value={props.value}
+                onChange={props.changed} />;
     }
     // So this is some complexity we'll have to handle either by creating multiple custom components for the different input types you might have so that we basically have a wrapper component for normal inputs, for text areas, whatever or by simply adding such a switch statement here.
 

@@ -85,6 +85,35 @@ class ContactData extends Component {
             });
     }
 
+    // there I expect to get an event object as it will automatically be passed to me by react if this method is attached to an event listener which it of course is.
+    inputChangedHandler = (event, inputIdentifier) => {
+        // console.log(event.target.value); // to see what we're entering, but input doesn't take?
+        // But of course, we can see the values in our inputs because what's missing is the other part of two way binding. We're not using this data here when the input changes to update the value of our elements and of course, we have that value key for each input element which we bind to it, so this is currently the key which determines the value which is shown on the screen.
+
+        // So we need to update the value for a given input upon user changes, for that of course we need more information than just the event which gives us access to the event target value, we also receive or need a second argument which is the input identifier so that we can reach out to our state, get the right element here, the right object and adjust its value.
+
+        // So to do that, I'll go to my contact data component and the method I passed to changed, the reference here should be a referenced to an anonymous function so that I can now pass arguments to the inputChangedHandler method call.
+
+        // the problem just is I of course can't access this.state.orderForm identifier and update the value, this is not how we mutate the state. Instead we have to mutate it, well immutably and we do this with set state and for that, what I'll do is I'll first of all create my copy my form data
+
+        const updatedOrderForm = {
+            ...this.state.orderForm
+        }
+
+        // However this does not create a deep clone, so I copy that object and I distribute all the properties, I get a new object but since these objects, I have more nested objects, these would not be cloned deeply but there, I will again just copy the pointer to them and hence if I change something there, I will still mutate the original state unfortunately because the object in my copied object and the object in the state would still be equal.
+
+        // NEED TO DEEP CLONE for value
+
+        // I'll take the updatedOrderForm which is a clone of the original one and not referring to the original one anymore and there I'll now access my input identifier so this is a value like email, like delivery method. Now I get access to this object which we haven't cloned already so now I need to clone that object and I'll store the new constant updatedFormElement, maybe.
+        const updatedFormElement = {...updatedOrderForm[inputIdentifier]};
+        // Now I can safely change the value of the updatedFormElement because it is again a clone.
+        updatedFormElement.value = event.target.value;
+        updatedOrderForm[inputIdentifier] = updatedFormElement;
+        // So I will reach out to updatedFormElement value and set this equal to event target value and now, I can take my updatedOrderForm, so this which is my clone original form and there, I can now again access the input identifier and set it equal to the updatedFormElement. Now with this, I can call this.setState and set order form to updated order form.
+        this.setState({orderForm: updatedOrderForm});
+        // Now we successfully set this up in a very generic way which is great.
+    }
+
     render () {
 
         // I now need to first of all turn my order form object here into some kind of array I can loop through, an array where we basically have javascript objects where this key is just one property an identifier property and then we also still have the other properties.
@@ -112,7 +141,8 @@ class ContactData extends Component {
                         key={formElement.id}
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
-                        value={formElement.config.value} />
+                        value={formElement.config.value}
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
                 <Button btnType='Success' clicked={this.orderHandler}>ORDER</Button>
                 {/* And then here on this button as in all buttons using our own button component, we can use our clicked property and pass the method which should get executed on a click as a reference. */}
