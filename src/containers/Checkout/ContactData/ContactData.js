@@ -86,12 +86,34 @@ class ContactData extends Component {
     }
 
     render () {
+
+        // I now need to first of all turn my order form object here into some kind of array I can loop through, an array where we basically have javascript objects where this key is just one property an identifier property and then we also still have the other properties.
+
+        const formElementsArray = [];
+
+        // the key therefore are of course the property names of that object. So the keys are going to be name, street, zipcode and so on
+        for (let key in this.state.orderForm) {
+            formElementsArray.push({
+                id: key,
+                config: this.state.orderForm[key]
+            });
+        }
+
         let form = (
             <form>
-                <Input elementType="..." elementConfig="..." value="..." />
-                <Input inputtype='input' type='email' name='email' placeholder='your email' />
-                <Input inputtype='input' type='text' name='street' placeholder='street address' />
-                <Input inputtype='input' type='text' name='postal' placeholder='street postal code' />
+                {/* dummy data */}
+                {/* <Input elementType="..." elementConfig="..." value="..." /> */}
+
+                {/* I can work with it by now creating my form here while looping through all these elements. So I will add curly braces here in the form and now I want to loop through my form elements array with the map method of course to generate a new array basically, here this will get the individual form element and it just returns some jsx here, the jsx it returns of course, it should be my custom input component. */}
+
+                {/* So in the end what I pass on here is form element, config and then there as I just said, the element type. So just the name we have here, element type, we pass element config and value in the same way, so here we passed the element type, now the element config is passed as I just said in the same way with form element config, element config and the value also is passed like this element, excuse me, form element, form element config element config. */}
+                {formElementsArray.map(formElement => (
+                    <Input 
+                        key={formElement.id}
+                        elementType={formElement.config.elementType}
+                        elementConfig={formElement.config.elementConfig}
+                        value={formElement.config.value} />
+                ))}
                 <Button btnType='Success' clicked={this.orderHandler}>ORDER</Button>
                 {/* And then here on this button as in all buttons using our own button component, we can use our clicked property and pass the method which should get executed on a click as a reference. */}
             </form>
