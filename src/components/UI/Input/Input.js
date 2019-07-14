@@ -7,15 +7,24 @@ const input = (props) => {
 
     // So this is a more generic approach we can set up and you can reach any amount of complexity here because now of course, you also have different attributes per element you might have so if you also have the case text area, a text area doesn't take the same inputs or the same attributes as a normal input element does.
     let inputElement = null;
-    switch (props.inputtype) {
+    switch (props.elementType) {
         case('input'):
-            inputElement = <input className={classes.InputElement} {...props} />;
+            inputElement = <input 
+                className={classes.InputElement} 
+                {...props.elementConfig} 
+                value={props.value} />;
             break;
         case ('textarea'):
-            inputElement = <textarea className={classes.InputElement} {...props} />;
+            inputElement = <textarea 
+                className={classes.InputElement} 
+                {...props.elementConfig} 
+                value={props.value} />;
             break;
         default:
-            inputElement = <input className={classes.InputElement} {...props} />;
+            inputElement = <input 
+                className={classes.InputElement} 
+                {...props.elementConfig} 
+                value={props.value} />;
     }
     // So this is some complexity we'll have to handle either by creating multiple custom components for the different input types you might have so that we basically have a wrapper component for normal inputs, for text areas, whatever or by simply adding such a switch statement here.
 
