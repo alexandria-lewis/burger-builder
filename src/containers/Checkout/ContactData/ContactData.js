@@ -71,9 +71,17 @@ class ContactData extends Component {
         // console.log(this.props.ingredients);
 
         this.setState({loading: true});
+        const formData = {};
+        // I just want to get the name and then the value directly mapped to each other.
+        for (let formElementIdentifier in this.state.orderForm) {
+            // so this very long form element identifier is simply email, country and so on.
+            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+            // So I simply create key value pairs where I have, where I add a new property to form data, a property like country, like email and so on and I set the value of that property not equal to an object but simply to the value the user entered.
+        }
         const order = {
             ingredients: this.props.ingredients,
-            price: this.props.price
+            price: this.props.price,
+            order: formData
         }
         axios.post('/orders.json', order)
             .then(response => {
@@ -129,7 +137,7 @@ class ContactData extends Component {
         }
 
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                 {/* dummy data */}
                 {/* <Input elementType="..." elementConfig="..." value="..." /> */}
 
@@ -144,7 +152,7 @@ class ContactData extends Component {
                         value={formElement.config.value}
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
-                <Button btnType='Success' clicked={this.orderHandler}>ORDER</Button>
+                <Button btnType='Success'>ORDER</Button>
                 {/* And then here on this button as in all buttons using our own button component, we can use our clicked property and pass the method which should get executed on a click as a reference. */}
             </form>
         );
