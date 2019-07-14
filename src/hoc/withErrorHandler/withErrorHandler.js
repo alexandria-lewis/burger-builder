@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Modal from '../../components/UI/Modal/Modal';
 import Aux from '../Aux/Aux';
-import { throwStatement } from '@babel/types';
+// import { throwStatement } from '@babel/types';
 
 // I am using this syntax withErrorHandler because I want to use this second way of creating a higher order component which will be used here on the export and not used as JSX code.
 

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
-import { throwStatement } from '@babel/types';
+import ContactData from './ContactData/ContactData';
+// import { throwStatement } from '@babel/types';
 
 class Checkout extends Component {
     state = {
@@ -45,6 +47,10 @@ class Checkout extends Component {
                     ingredients={this.state.ingredients}
                     checkoutCancelled={this.checkoutCancelledHandler}
                     checkoutContinued={this.checkoutContinuedHandler} />
+                <Route 
+                    path={this.props.match.path + '/contact-data'} 
+                    component={ContactData} />
+                    {/* use route here below my checkOutSummary to load something for a path which should now depend on the path we're currently on +/ContactData. So I'll use this props and then we can use match url (this.props.match.url) or also for building paths and routes you might use path +/ contact data and this should also be part of the dynamic path here, the string. */}
             </div>
         );
     }
