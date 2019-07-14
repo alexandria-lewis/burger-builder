@@ -20,6 +20,22 @@ const input = (props) => {
                 {...props.elementConfig} 
                 value={props.value} />;
             break;
+        case ('select'):
+            inputElement = (
+                <select 
+                    className={classes.InputElement}
+                    value={props.value}>
+                        {/* And by the way, having that value on the select is important to make two way binding work correctly and so on. */}
+                        {/* to dynamically create options mapping this into an array of jsx elements */}
+                    {props.elementConfig.options.map(option => (
+                        <option key={option.value} value={option.value}>
+                            {option.displayValue}
+                            {/* We can't change the value for now because we don't have the onChange handler and the key is missing, so that's something we have to add to the option element because we're creating it with the map method. */}
+                        </option>
+                    ))}
+                </select>
+            );
+            break;
         default:
             inputElement = <input 
                 className={classes.InputElement} 
