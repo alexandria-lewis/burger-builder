@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout';
+import Orders from './containers/Orders/Orders';
 
 class App extends Component {
   // let's go back to app.js and to make sure that burger builder disappears after a while, I'll temporarily add a state to my app component, it is a class-based component so I can of course do this and I will simply add a show property which is true initially and I will then use it here with this state show to show the burger builder or show null which essentially removes the burger builder of course because it's only added to the DOM if show is true.
@@ -30,6 +31,7 @@ class App extends Component {
           
           <Switch>
             <Route path="/checkout" component={Checkout} />
+            <Route path="/orders" component={Orders} />
             <Route path="/" exact component={BurgerBuilder} />
           </Switch>
 
