@@ -85,9 +85,11 @@ class ContactData extends Component {
                         {value: 'cheapest', displayValue: 'Cheapest'},
                     ]
                 },
-                value: ''
+                value: '',
+                valid: true
             }
         },
+        formIsValid: false,
         loading: false
     }
 
@@ -140,7 +142,7 @@ class ContactData extends Component {
                 isValid = value.length <= rules.maxLength && isValid;
             }
         }
-        
+
         return isValid;
     }
 
@@ -175,10 +177,17 @@ class ContactData extends Component {
         updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] = updatedFormElement;
 
+        // but here(above line) we're setting it for one element, here I'm looping through all the elements.
+        let formIsValid = true;
+        for (let inputIdentifier in updatedOrderForm) {
+            formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+        }
+        // Only if both is the case, FormIsValid is updated to true and if this is false and FormIsValid was true then the resulting value will be false and FormIsValid will be set to false because false overrides true.
+
         console.log(updatedFormElement); // on keypress validity is checked!!
 
         // So I will reach out to updatedFormElement value and set this equal to event target value and now, I can take my updatedOrderForm, so this which is my clone original form and there, I can now again access the input identifier and set it equal to the updatedFormElement. Now with this, I can call this.setState and set order form to updated order form.
-        this.setState({orderForm: updatedOrderForm});
+        this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
         // Now we successfully set this up in a very generic way which is great.
     }
 
@@ -216,7 +225,9 @@ class ContactData extends Component {
                         // if the validation property isn't set as for my dropdown, this will return true or false and therefore this if check in my input component here will not run and it will never get the invalid class,
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
-                <Button btnType='Success'>ORDER</Button>
+                <Button btnType='Success' disabled={!this.state.formIsValid}>ORDER</Button>
+                {/* only if the form is not valid, this should be disabled. So disable is true if the form is not valid. */}
+
                 {/* And then here on this button as in all buttons using our own button component, we can use our clicked property and pass the method which should get executed on a click as a reference. */}
             </form>
         );
