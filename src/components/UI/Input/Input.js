@@ -11,7 +11,7 @@ const input = (props) => {
     const inputClasses = [classes.InputElement];
 
     // also needs to receive the invalid property if the input is invalid and I'll do this with a if check, that check is independent of the type of the input so I only need to do it once at the beginning. I'll check if props.invalid is set to true, if it is then I'll push a new class to my inputClasses, the invalid.css class and of course not like that, classes.Invalid, I need to define that class.
-    if (props.invalid && props.shouldValidate) {
+    if (props.invalid && props.shouldValidate && props.touched) {
         inputClasses.push(classes.Invalid);
     }
     // Now to see that effect, I have to go back to the contact data and there, I now need to pass that invalid property to the input I render

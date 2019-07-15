@@ -20,7 +20,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             street: {
                 elementType: 'input',
@@ -32,7 +33,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             zipCode: {
                 elementType: 'input',
@@ -46,7 +48,8 @@ class ContactData extends Component {
                     minLength: 5,
                     maxLength: 5
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             country: {
                 elementType: 'input',
@@ -58,7 +61,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             email: {
                 elementType: 'input',
@@ -70,7 +74,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             deliveryMethod: {
                 elementType: 'select',
@@ -120,19 +125,22 @@ class ContactData extends Component {
         // then just this rule resolving to true alone won't do the trick, all the rules now have to resolve to true.
         
         // so if that is true-ish then I want to adjust some isValid variable which initially is false as a default maybe, I want to set isValid equal to the value comparison, so isValid should be equal if it's not equal to an empty string, however I want to use value trim here to remove any whitespaces at the beginning or end.
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
 
-        // We could add another check here where we say if rules.minLength, if we have something like this, then we can set isValid equal to value.length greater equal rules.minLength. So now minLength of course would be expected to be like a value like one or two or three which also will resolve to true so which will activate this rule.
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
+        if (rules) {
+            if (rules.required) {
+                isValid = value.trim() !== '' && isValid;
+            }
+    
+            // We could add another check here where we say if rules.minLength, if we have something like this, then we can set isValid equal to value.length greater equal rules.minLength. So now minLength of course would be expected to be like a value like one or two or three which also will resolve to true so which will activate this rule.
+            if (rules.minLength) {
+                isValid = value.length >= rules.minLength && isValid;
+            }
+    
+            if (rules.maxLength) {
+                isValid = value.length <= rules.maxLength && isValid;
+            }
         }
-
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-
+        
         return isValid;
     }
 
@@ -164,6 +172,7 @@ class ContactData extends Component {
         // So validation here has for example a required property and that is what I check for in checkValidity, I see if my rules object has a required property and if the value of that property is true-ish or is treated as true.
 
         updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] = updatedFormElement;
 
         console.log(updatedFormElement); // on keypress validity is checked!!
@@ -203,6 +212,7 @@ class ContactData extends Component {
                         value={formElement.config.value}
                         invalid={!formElement.config.valid}
                         shouldValidate={formElement.config.validation}
+                        touched={formElement.config.touched}
                         // if the validation property isn't set as for my dropdown, this will return true or false and therefore this if check in my input component here will not run and it will never get the invalid class,
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
