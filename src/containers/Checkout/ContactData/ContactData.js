@@ -201,6 +201,9 @@ class ContactData extends Component {
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
                         value={formElement.config.value}
+                        invalid={!formElement.config.valid}
+                        shouldValidate={formElement.config.validation}
+                        // if the validation property isn't set as for my dropdown, this will return true or false and therefore this if check in my input component here will not run and it will never get the invalid class,
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
                 <Button btnType='Success'>ORDER</Button>

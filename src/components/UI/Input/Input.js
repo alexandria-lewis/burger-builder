@@ -1,16 +1,25 @@
 import React from 'react';
 
 import classes from './Input.css';
+import { join } from 'path';
 
 const input = (props) => {
     // we should actually turn this function here which just returns jsx into a function which has a real function body where we also return jsx of course, but where we also have some check before we do so, where we check what our input really is.
 
     // So this is a more generic approach we can set up and you can reach any amount of complexity here because now of course, you also have different attributes per element you might have so if you also have the case text area, a text area doesn't take the same inputs or the same attributes as a normal input element does.
     let inputElement = null;
+    const inputClasses = [classes.InputElement];
+
+    // also needs to receive the invalid property if the input is invalid and I'll do this with a if check, that check is independent of the type of the input so I only need to do it once at the beginning. I'll check if props.invalid is set to true, if it is then I'll push a new class to my inputClasses, the invalid.css class and of course not like that, classes.Invalid, I need to define that class.
+    if (props.invalid && props.shouldValidate) {
+        inputClasses.push(classes.Invalid);
+    }
+    // Now to see that effect, I have to go back to the contact data and there, I now need to pass that invalid property to the input I render
+
     switch (props.elementType) {
         case('input'):
             inputElement = <input 
-                className={classes.InputElement} 
+                className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
                 value={props.value}
                 onChange={props.changed} />;
@@ -18,7 +27,7 @@ const input = (props) => {
             break;
         case ('textarea'):
             inputElement = <textarea 
-                className={classes.InputElement} 
+                className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
                 value={props.value}
                 onChange={props.changed} />;
@@ -26,7 +35,7 @@ const input = (props) => {
         case ('select'):
             inputElement = (
                 <select 
-                    className={classes.InputElement}
+                    className={inputClasses.join(' ')}
                     value={props.value}
                     onChange={props.changed} >
                         {/* And by the way, having that value on the select is important to make two way binding work correctly and so on. */}
@@ -42,7 +51,7 @@ const input = (props) => {
             break;
         default:
             inputElement = <input 
-                className={classes.InputElement} 
+                className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
                 value={props.value}
                 onChange={props.changed} />;
