@@ -116,20 +116,21 @@ class ContactData extends Component {
     }
 
     checkValidity(value, rules) {
-        let isValid = false;
+        let isValid = true;
+        // then just this rule resolving to true alone won't do the trick, all the rules now have to resolve to true.
         
         // so if that is true-ish then I want to adjust some isValid variable which initially is false as a default maybe, I want to set isValid equal to the value comparison, so isValid should be equal if it's not equal to an empty string, however I want to use value trim here to remove any whitespaces at the beginning or end.
         if (rules.required) {
-            isValid = value.trim() !== '';
+            isValid = value.trim() !== '' && isValid;
         }
 
         // We could add another check here where we say if rules.minLength, if we have something like this, then we can set isValid equal to value.length greater equal rules.minLength. So now minLength of course would be expected to be like a value like one or two or three which also will resolve to true so which will activate this rule.
         if (rules.minLength) {
-            isValid = value.length >= rules.minLength;
+            isValid = value.length >= rules.minLength && isValid;
         }
 
         if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength;
+            isValid = value.length <= rules.maxLength && isValid;
         }
 
         return isValid;
