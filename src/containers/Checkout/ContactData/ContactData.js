@@ -16,7 +16,11 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your Name'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false
             },
             street: {
                 elementType: 'input',
@@ -24,7 +28,11 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Street'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false
             },
             zipCode: {
                 elementType: 'input',
@@ -32,7 +40,13 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Zipcode'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true,
+                    minLength: 5,
+                    maxLength: 5
+                },
+                valid: false
             },
             country: {
                 elementType: 'input',
@@ -40,7 +54,11 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Country'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false
             },
             email: {
                 elementType: 'input',
@@ -48,7 +66,11 @@ class ContactData extends Component {
                     type: 'email',
                     placeholder: 'Your Email'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false
             },
             deliveryMethod: {
                 elementType: 'select',
@@ -93,6 +115,26 @@ class ContactData extends Component {
             });
     }
 
+    checkValidity(value, rules) {
+        let isValid = false;
+        
+        // so if that is true-ish then I want to adjust some isValid variable which initially is false as a default maybe, I want to set isValid equal to the value comparison, so isValid should be equal if it's not equal to an empty string, however I want to use value trim here to remove any whitespaces at the beginning or end.
+        if (rules.required) {
+            isValid = value.trim() !== '';
+        }
+
+        // We could add another check here where we say if rules.minLength, if we have something like this, then we can set isValid equal to value.length greater equal rules.minLength. So now minLength of course would be expected to be like a value like one or two or three which also will resolve to true so which will activate this rule.
+        if (rules.minLength) {
+            isValid = value.length >= rules.minLength;
+        }
+
+        if (rules.maxLength) {
+            isValid = value.length <= rules.maxLength;
+        }
+
+        return isValid;
+    }
+
     // there I expect to get an event object as it will automatically be passed to me by react if this method is attached to an event listener which it of course is.
     inputChangedHandler = (event, inputIdentifier) => {
         // console.log(event.target.value); // to see what we're entering, but input doesn't take?
@@ -115,8 +157,16 @@ class ContactData extends Component {
         // I'll take the updatedOrderForm which is a clone of the original one and not referring to the original one anymore and there I'll now access my input identifier so this is a value like email, like delivery method. Now I get access to this object which we haven't cloned already so now I need to clone that object and I'll store the new constant updatedFormElement, maybe.
         const updatedFormElement = {...updatedOrderForm[inputIdentifier]};
         // Now I can safely change the value of the updatedFormElement because it is again a clone.
+
         updatedFormElement.value = event.target.value;
+        // In the inputChangedHandler, I can then of course also update my valid value of the updatedFormElement, here I want to set updatedFormElement.valid equal to this.checkValidity and pass the updatedFormElement value which we already adjusted to the value passed by the event, and of course I want to pass my updatedFormElement validation object which is just my rules.
+        // So validation here has for example a required property and that is what I check for in checkValidity, I see if my rules object has a required property and if the value of that property is true-ish or is treated as true.
+
+        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedOrderForm[inputIdentifier] = updatedFormElement;
+
+        console.log(updatedFormElement); // on keypress validity is checked!!
+
         // So I will reach out to updatedFormElement value and set this equal to event target value and now, I can take my updatedOrderForm, so this which is my clone original form and there, I can now again access the input identifier and set it equal to the updatedFormElement. Now with this, I can call this.setState and set order form to updated order form.
         this.setState({orderForm: updatedOrderForm});
         // Now we successfully set this up in a very generic way which is great.
