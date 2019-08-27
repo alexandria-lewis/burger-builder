@@ -43,6 +43,7 @@ class Layout extends Component{
                     open={this.state.showSideDrawer} 
                     // we need to pass the open property to the sideDrawer to now and that should be this.state.showSideDrawer because this will hold the information whether the sideDrawer should be opened or not.
                     closed={this.sideDrawerClosedHandler} />
+                    
                 <main className={classes.Content}>
                     {this.props.children}
                     {/* props can now be accessed with this.props as you learned, that's the case for all class based components. */}
