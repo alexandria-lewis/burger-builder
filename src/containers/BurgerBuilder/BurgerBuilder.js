@@ -9,7 +9,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
-import * as actionTypes from '../../store/actions/actionTypes';
+import * as burgerBuilderActions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
     state = {
@@ -117,8 +117,8 @@ const mapStateToProps = state => {
 // mod 304 So here onIngredientAdded will hold an anonymous function where I then execute dispatch and pass a javascript object where the type should now be my ADD_INGREDIENT action type
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
-        onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName})
+        onIngredientAdded: (ingName) => dispatch(burgerBuilderActions.ADD_INGREDIENT(ingName)),
+        onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.REMOVE_INGREDIENT(ingName))
     }
 }
 
