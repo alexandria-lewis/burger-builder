@@ -7,9 +7,12 @@ import { createStore } from 'redux';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import reducer from './store/reducer';
+import reducer from './store/reducers/burgerBuilder';
 
-const store = createStore(reducer);// mod 302 created store
+const store = createStore(
+    reducer, /* preloadedState, */
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 // Now I'll create a new constant which I'll just name app, I'll use parentheses to be able to write multi-line jsx code and then I'll use the browser router opening and closing tag and in between I'll put my app like this.
 const app = (
