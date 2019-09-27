@@ -20,15 +20,14 @@ class BurgerBuilder extends Component {
 
     componentDidMount () {
         console.log(this.props);
-        // axios.get('https://react-my-burger-2153f.firebaseio.com/ingredients.json')
-        // // DONT forget .json for firebase
-        // .then(response => {
-        //     // So now the goal is to set our state, here ingredients to that object,
-        //     this.setState({ingredients: response.data})
-        // })
-        // .catch(error => {
-        //     this.setState({error: true});
-        // });
+        axios.get('https://react-my-burger-2153f.firebaseio.com/ingredients.json')
+        // DONT forget .json for firebase
+        .then(response => {
+            this.setState({ingredients: response.data})
+        })
+        .catch(error => {
+            this.setState({error: true});
+        });
     }
 
     updatePurchaseState (ingredients) {
@@ -117,8 +116,8 @@ const mapStateToProps = state => {
 // mod 304 So here onIngredientAdded will hold an anonymous function where I then execute dispatch and pass a javascript object where the type should now be my ADD_INGREDIENT action type
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (ingName) => dispatch(burgerBuilderActions.ADD_INGREDIENT(ingName)),
-        onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.REMOVE_INGREDIENT(ingName))
+        onIngredientAdded: (ingName) => dispatch(burgerBuilderActions.addIngredient(ingName)),
+        onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName))
     }
 }
 
