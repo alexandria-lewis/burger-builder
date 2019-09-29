@@ -147,7 +147,7 @@ class ContactData extends Component {
             formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
         }
 
-        console.log(updatedFormElement); // on keypress validity is checked!!
+        // console.log(updatedFormElement); // on keypress validity is checked!!
 
         this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
     }
